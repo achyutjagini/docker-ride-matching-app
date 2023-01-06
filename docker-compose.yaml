@@ -1,0 +1,49 @@
+# Fill in the YAML configuration for the microservices 
+
+version: "2.1"
+services:
+  rabbitMQ_server:
+    image: rabbitmq
+    container_name: rabbitmq
+    restart: on-failure
+
+  producer:
+    build:
+      context: .
+      dockerfile: Dockerfile_producer
+    container_name: producer
+    ports:
+      - "54321:5000"
+    restart: on-failure
+    depends_on:
+      - rabbitMQ_server
+
+  ride_matching:
+    build:
+      context: .
+      dockerfile: Dockerfile_ride_matching
+    container_name: ride_matching_1
+    restart: on-failure
+    depends_on:
+      - producer
+    environment:
+      - CONSUMER_ID=C1
+      - PRODUCER_ADDRESS=producer:5000
+
+  ride_database:
+    build:
+      context: .
+      dockerfile: Dockerfile_database
+    container_name: ride_database
+    restart: on-failure
+    depends_on:
+      - producer
+      - mongodb
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    depends_on:
+      - producer
+    restart: on-failure
+  

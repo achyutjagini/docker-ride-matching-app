@@ -1,0 +1,11 @@
+# Dockerfile for Producer 
+FROM python
+
+RUN mkdir -p /usr/src/producer \
+    && pip3 install pika flask
+
+ENV FLASK_APP=producer
+WORKDIR /usr/src/producer
+COPY producer.py ./
+
+CMD [ "flask", "run", "--host=0.0.0.0" ]

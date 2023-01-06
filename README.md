@@ -1,5 +1,3 @@
-# ride-matching
-
 # CloudHack_2
 
 Team members details:
