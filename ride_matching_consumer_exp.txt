@@ -1,0 +1,44 @@
+
+This code is for a consumer that connects to a RabbitMQ server and consumes messages from a queue. 
+The consumer sends a POST request to the /new_ride_matching_consumer endpoint of the producer server
+
+and then starts consuming messages from the ride_match queue.
+
+
+The consumer first imports several libraries that it uses later in the code. It then sets the CONSUMER_ID
+ and PRODUCER_ADDRESS variables from environment variables. The time.sleep(10) function is called to make
+  the consumer wait for 10 seconds before sending the POST request to the producer.
+
+The consumer then sends a POST request to the /new_ride_matching_consumer endpoint of the producer server, 
+passing a consumer_id parameter with the value of CONSUMER_ID.
+
+Next, the consumer establishes a connection to the RabbitMQ server and declares the ride_match queue. 
+It then defines a callback function that will be called every time a message is consumed from the queue.
+
+The callback function takes four arguments:
+
+ch: the channel object that the message was consumed from.
+
+method: the method of the message, which includes the delivery_tag property that can be used to acknowledge the message.
+properties: the message properties.
+
+body: the content of the message.
+
+The callback function first decodes the body of the message and loads it into a Python dictionary using 
+the json.loads function. It then adds a new field '_id' to the dictionary and sets its value to the message_id
+ property of the properties object.
+
+The callback function then "simulates" some work by sleeping for a number of seconds equal to the 'time'
+ field of the message. Finally, it acknowledges the message using the basic_ack method of the channel object,
+  passing the delivery_tag of the message as an argument.
+
+
+The consumer then sets the quality of service (QoS) of the channel to prefetch_count=1, which means that the
+consumer will only consume one message at a time. This can be useful to prevent the consumer from overloading 
+the system by consuming too many messages simultaneously.
+
+
+Finally, the consumer starts consuming messages from the ride_match queue by calling the basic_consume method
+ of the channel object and passing the callback function as an argument. It then enters a loop by calling the
+  start_consuming method of the channel object, which waits for messages to arrive and calls the callback 
+  function for each message.

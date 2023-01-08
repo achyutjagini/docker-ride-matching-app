@@ -1,0 +1,26 @@
+
+
+This code is for a consumer that consumes messages from a database queue in RabbitMQ and
+ inserts the message data into a MongoDB database.
+
+
+The consumer starts by sleeping for 10 seconds and then establishing a connection to the MongoDB 
+server and creating a database and collection.
+
+Next, the consumer establishes a connection to the RabbitMQ server and creates a channel 
+to consume messages. It declares the database queue and starts the message consumption loop
+ by calling the start_consuming method of the channel object.
+
+The callback function, which is called for each message received in the consumption loop,
+ loads the message body from the body argument using the json.loads function, assigns 
+ the message ID from the properties argument to the _id field of the message data,
+  and inserts the message data into the ride_details collection of the ride_matching
+   database using the insert_one method of the collection object.
+
+Finally, the callback function acknowledges the message by calling the basic_ack method 
+of the channel object with the delivery tag from the method argument. This tells RabbitMQ
+ that the message has been successfully processed and can be removed from the queue.
+
+The basic_qos method is called before the basic_consume method and sets the quality of 
+service for the channel to allow only one unacknowledged message to be delivered to the
+ consumer at a time. This ensures that the consumer can process messages in a reliable and consistent order

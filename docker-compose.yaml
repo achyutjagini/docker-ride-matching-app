@@ -26,6 +26,7 @@ services:
     restart: on-failure
     depends_on:
       - producer
+    #setting environment variables
     environment:
       - CONSUMER_ID=C1
       - PRODUCER_ADDRESS=producer:5000
