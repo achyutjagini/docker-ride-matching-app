@@ -1,0 +1,24 @@
+
+
+This is a Dockerfile that specifies the steps to build a Docker 
+image for the producer microservice.
+
+The FROM directive specifies the base image to use for the Docker image. In this case, 
+the base image is python, 
+which is a minimal Docker image that includes the Python runtime.
+
+The RUN directive runs a command to create a new directory and install
+ the pika and flask Python packages. The pika package is a client library for RabbitMQ, 
+ and the flask package is a web framework for Python.
+
+The ENV directive sets the environment variable FLASK_APP to producer.
+
+The WORKDIR directive sets the current working directory for the
+ subsequent instructions in the Dockerfile.
+
+The COPY directive copies the producer.py file from the build context
+ (the current directory) to the working directory in the image.
+
+The CMD directive specifies the command to run when the container is started.
+ In this case, the flask command is run with the run subcommand to start
+  the Flask development server, listening on all interfaces (--host=0.0.0.0).

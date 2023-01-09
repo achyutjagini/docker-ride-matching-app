@@ -1,0 +1,32 @@
+
+This is a Docker Compose configuration file that defines a 
+set of microservices for a ride-matching application.
+
+
+The configuration file defines four services: rabbitmq_server, 
+producer, ride_matching, and ride_database.
+
+
+The rabbitmq_server service is based on the rabbitmq image and runs a
+ RabbitMQ server in a container. The container will be named rabbitmq 
+ and will restart if it fails.
+
+
+The producer service is built using the Dockerfile_producer file
+and runs a Flask server
+that accepts requests for rides and publishes them to a RabbitMQ queue.
+The container will be named producer and will be exposed on port 54321 of the host. 
+The container will restart if it fails and depends on the rabbitmq_server service.
+
+
+The ride_matching service is built using the Dockerfile_ride_matching file 
+and runs a consumer that consumes messages from a RabbitMQ queue and processes
+them. The container will be named ride_matching_1 and will restart if it fails. 
+It depends on the producer service and has environment variables CONSUMER_ID 
+and PRODUCER_ADDRESS set.
+
+
+The ride_database service is built using the Dockerfile_database file
+ and runs a consumer that consumes messages from a RabbitMQ queue 
+ and stores them in a MongoDB database. The container will be named 
+ ride_database and will restart
